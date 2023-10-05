@@ -102,21 +102,64 @@ const typeDefs = `
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks: [Book!]!
+    allBooks(
+      author: String
+      genre: String
+    ): [Book!]!
     allAuthors: [Author!]!
   }
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int
+      genres: [String]
+    ): Book
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
+  }
 `
-
+const { v1: uuid } = require('uuid')
 const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: () => books,
-    allAuthors: () => authors
+    allBooks: (root, args) => {
+      if (args.author && args.genre) 
+        return books.filter(b => 
+        ((b.author === args.author) && (b.genres.includes(args.genre)))
+        )
+      else if (args.author) 
+        return books.filter(b => b.author === args.author)
+      else if (args.genre) 
+        return books.filter(b => b.genres.includes(args.genre))
+      return books
     },
+    allAuthors: () => authors
+  },
   Author: {
     bookCount: (root) => {
       return books.filter(b => b.author === root.name).length
+    }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      const author = authors.find(a => a.name === args.author)
+      if (!author)
+        authors = authors.concat({ name: args.author, id: uuid() })
+      return book
+    },
+    editAuthor: (root, args) => {
+      const author = authors.find(a => a.name === args.name)
+      if (!author) return null
+      
+      const updatedAuthor = { ...author, born: args.setBornTo }
+      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
+      return updatedAuthor
     }
   }
 }
