@@ -9,7 +9,16 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
+  const clearFields = () => {
+      setTitle('')
+      setPublished('')
+      setAuthor('')
+      setGenres([])
+      setGenre('')
+    }
+
   const [ addBook ] = useMutation(ADD_BOOK, {
+    onCompleted: () => clearFields(), 
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }] //rerendering on adding new book, doesn't reflect other users' changes
   })
 
@@ -19,14 +28,7 @@ const NewBook = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-
     addBook({ variables: { title, author, published, genres } })
-
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')
   }
 
   const addGenre = () => {
@@ -70,6 +72,7 @@ const NewBook = (props) => {
         </div>
         <div>genres: {genres.join(' ')}</div>
         <button type="submit">create book</button>
+        <button onClick={clearFields} type="button">clear</button>
       </form>
     </div>
   )

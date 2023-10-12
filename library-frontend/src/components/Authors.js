@@ -31,9 +31,9 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <Birthyear authors={authors}/>
+      {props.token && <Birthyear authors={authors}/>}
     </div>
-  )
+  ) // birthyear selection only visible when logged in
 }
 
 export default Authors
