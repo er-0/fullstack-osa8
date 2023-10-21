@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
+import { ADD_BOOK, ALL_AUTHORS } from '../queries'
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -19,7 +19,11 @@ const NewBook = (props) => {
 
   const [ addBook ] = useMutation(ADD_BOOK, {
     onCompleted: () => clearFields(), 
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }] //rerendering on adding new book, doesn't reflect other users' changes
+    refetchQueries: ['allBooks', { query: ALL_AUTHORS }],
+    //rerendering on adding new book, doesn't reflect other users' changes
+
+    // got it to work with 'allBooks' rather than the {} style, no idea why, 
+    // but it doesn't even need a genre selection rerender or a query import
   })
 
   if (!props.show) {

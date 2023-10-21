@@ -6,17 +6,14 @@ const LoginForm = ({ show, setError, setToken, setPage }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-
   const [ login, result ] = useMutation(LOGIN, {
     onCompleted: () => {
       setPage('books')
-    } 
-    /*
+    },
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
-    }*/
+    }
   })
-
 
   useEffect(() => {
     if ( result.data ) {

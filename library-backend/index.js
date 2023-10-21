@@ -149,11 +149,9 @@ const resolvers = {
         })
       }
       let author = await Author.findOne({ name: args.author })
-      console.log(author, '1')
       if (!author)
         author = new Author({ name: args.author })
         await author.save()
-      console.log(author, '2')
       const book = new Book({ ...args, author: author })
       return await book.save()
     },

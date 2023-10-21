@@ -5,7 +5,6 @@ import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries';
 
 
 const Birthyear = ({ authors }) => {
-  console.log(authors)
   const [selectedOption, setSelectedOption] = useState(null);
   const [year, setYear] = useState('')
 

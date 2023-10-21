@@ -7,6 +7,14 @@ export const LOGIN = gql`
     }
   }
 `
+export const USER = gql`
+  query {
+    me {
+      username
+      favoriteGenre
+    }
+  }
+`
 
 export const ALL_AUTHORS = gql`
   query {
