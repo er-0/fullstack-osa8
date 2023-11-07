@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+Books2.js
+# openai version that solved one problem by breaking 8.21

@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import UserRecs from './components/UserRecs'
+import { BOOK_ADDED } from './queries'
+import { ALL_BOOKS } from './queries'
 
 const App = () => {
+  const result = useQuery(ALL_BOOKS)
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const client = useApolloClient()
-
+  
   const logout = () => {
     setToken(null)
     localStorage.removeItem('library-user-token')
@@ -23,6 +26,10 @@ const App = () => {
       setToken(localStorage.getItem('library-user-token'))  
     }
   }, [token])
+
+  if (result.loading)  {
+    return <div>loading...</div>
+  }
 
   return (
     <div>
